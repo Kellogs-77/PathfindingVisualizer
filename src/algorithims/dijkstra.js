@@ -1,23 +1,23 @@
-const node = {
-    row, 
-    col, 
-    isVisited, 
-    distance,
-};
-function dijkstra(grid, startNode, finishNode) {
+
+export function dijkstra(grid, startNode, finishNode) {
+    const visitedNodesInOrder = [];
+
     if (!startNode || !finishNode || startNode === finishNode) {
       return false;
     }
-    nodes[startNode].distance = 0;
-    const unvisitedNodes = nodes.slice();
-    while (unvisitedNodes.length) {
-        sortNodesByDistance(univistedNodes);
-        const closestNode = unvisitedNodes.unshift();
+
+    startNode.distance = 0;
+    const unvisitedNodes = getAllNodes(grid);
+    console.log(unvisitedNodes);
+    while (!!unvisitedNodes.length) {
+        sortNodesByDistance(unvisitedNodes);
+        const closestNode = unvisitedNodes.shift();
 
         //HANDLE WALLS LATER
 
         closestNode.isVisited = true;
-        if (closestNode === finishNode) return 'success!';
+        visitedNodesInOrder.push(closestNode);
+        if (closestNode === finishNode) return visitedNodesInOrder;//allows us to animate nodes in visited order
         updateNeighbors(closestNode, grid);
         }
     }
@@ -43,5 +43,15 @@ function dijkstra(grid, startNode, finishNode) {
 
         return neighbors;
       }
+
+    function getAllNodes(grid){
+        const nodes = [];
+        for(const row of grid) {
+            for(const node of row) {
+                nodes.push(node);
+            }
+        }
+        return nodes;
+    }
 
    
