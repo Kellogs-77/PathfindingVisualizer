@@ -23,12 +23,27 @@ export default class PathfindingVisualizer extends Component {
         this.setState({grid});
     }
 
+    animateDijkstra(visitedNodesInOrder) {
+        for(let i = 0; i < visitedNodesInOrder.length; i++) {
+            setTimeout(()=> { 
+                const node = visitedNodesInOrder[i];
+                const newGrid = this.state.grid.slice();
+                const newNode = {
+                    ...node,
+                    isVisited:true,
+                };
+            newGrid[node.row][node.col] = newNode;
+            this.setState({grid: newGrid});
+            }, 20 * i);
+        }
+    }
+
     visualizeDijkstra() {
         const {grid} = this.state;
         const startNode = grid[START_NODE_ROW][START_NODE_COL];
         const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
         const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
-        console.log(visitedNodesInOrder);
+        this.animateDijkstra(visitedNodesInOrder);
     }
 
     render () {
@@ -44,21 +59,13 @@ export default class PathfindingVisualizer extends Component {
                 return (
                     <div key ={rowIdx}>
                         {row.map((node, nodeIdx) => {
-                            const {row, col, isFinish, isStart, isWall} = node;
+                            const {isFinish, isStart, isVisited} = node;
                             return (
                                 <Node
                                     key={nodeIdx}
-                                    col = {col}
                                     isStart ={isStart}
-                                    isWall = {isWall}
                                     isFinish={isFinish}
-                                    mouseIsPressed = {mouseIsPressed}
-                                    onMouseDown = {(row, col) => this.handleMouseDown(row, col)}
-                                    onMouseEnter = {(row, col) =>
-                                        this.handleMouseEnter(row, col)
-                                    }
-                                    onMouseUp = {() => this.handleMouseUp()}
-                                    row = {row}></Node>
+                                    isVisited={isVisited}></Node>
                                     
                             );
                         })}
@@ -89,9 +96,50 @@ const createNode = (col, row) => {
         row, 
         isStart: row === START_NODE_ROW && col === START_NODE_COL,
         isFinish: row === FINISH_NODE_ROW && col === FINISH_NODE_COL,
-        distance: Infinity,
         isVisited: false,
+        distance: Infinity,
         isWall: false,
         previousNode: null,
     };
 };
+
+
+
+// render () {
+//     const {grid, mouseIsPressed} = this.state;
+
+//     return (
+//         <>
+//            <button onClick= {() => this.visualizeDijkstra()}>
+//                Visualize Dijkstra's Algorithim
+//            </button>
+//             <div className ="grid">
+//             {grid.map((row, rowIdx) => {
+//             return (
+//                 <div key ={rowIdx}>
+//                     {row.map((node, nodeIdx) => {
+//                         const {row, col, isFinish, isStart, isWall} = node;
+//                         return (
+//                             <Node
+//                                 key={nodeIdx}
+//                                 col = {col}
+//                                 isStart ={isStart}
+//                                 isWall = {isWall}
+//                                 isFinish={isFinish}
+//                                 mouseIsPressed = {mouseIsPressed}
+//                                 onMouseDown = {(row, col) => this.handleMouseDown(row, col)}
+//                                 onMouseEnter = {(row, col) =>
+//                                     this.handleMouseEnter(row, col)
+//                                 }
+//                                 onMouseUp = {() => this.handleMouseUp()}
+//                                 row = {row}></Node>
+                                
+//                         );
+//                     })}
+//                 </div>
+//             );
+//         })}
+//         </div>
+//         </>
+//     );
+// }

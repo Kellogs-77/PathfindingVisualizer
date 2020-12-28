@@ -15,7 +15,6 @@ export function dijkstra(grid, startNode, finishNode) {
 
         //HANDLE WALLS LATER
 
-        closestNode.isVisited = true;
         visitedNodesInOrder.push(closestNode);
         if (closestNode === finishNode) return visitedNodesInOrder;//allows us to animate nodes in visited order
         updateNeighbors(closestNode, grid);
