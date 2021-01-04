@@ -12,8 +12,8 @@ export function dijkstra(grid, startNode, finishNode) {
     while (!!unvisitedNodes.length) {
         sortNodesByDistance(unvisitedNodes);
         const closestNode = unvisitedNodes.shift();
-
-        //HANDLE WALLS LATER
+        if(closestNode.isWall) continue;
+        if(closestNode.distance === Infinity) return visitedNodesInOrder;
 
         visitedNodesInOrder.push(closestNode);
         if (closestNode === finishNode) return visitedNodesInOrder;//allows us to animate nodes in visited order
@@ -52,5 +52,14 @@ export function dijkstra(grid, startNode, finishNode) {
         }
         return nodes;
     }
+    export function getNodesInShortestPathOrder(finishNode) {
+        const nodesInShortestPathOrder = [];
+        let currentNode = finishNode;
+        while (currentNode !== null) {
+          nodesInShortestPathOrder.unshift(currentNode);
+          currentNode = currentNode.previousNode;
+        }
+        return nodesInShortestPathOrder;
+      }
 
    
